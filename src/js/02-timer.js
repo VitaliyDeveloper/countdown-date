@@ -10,12 +10,14 @@ import 'flatpickr/dist/themes/material_green.css';
 let selectedTime = null;
 
 const refs = {
+  containerEl: document.querySelector('.main-container'),
   headEl: document.querySelector('head'),
   timerEl: document.querySelector('.timer'),
   fieldEl: document.querySelectorAll('.field'),
   spanValueEl: document.querySelectorAll('.value'),
   inputEl: document.querySelector('#datetime-piker'),
   startBtn: document.querySelector('[data-start]'),
+  resetBtn: document.querySelector('[data-reset]'),
   daysEl: document.querySelector('[data-days]'),
   hoursEl: document.querySelector('[data-hours]'),
   minutesEl: document.querySelector('[data-minutes]'),
@@ -23,15 +25,15 @@ const refs = {
 };
 
 /////STYLE//////////////////////////////////////
-refs.timerEl.style.cssText = 'display: flex; aling-items: center';
-refs.startBtn.style.backgroundColor = '#1BBC9B';
-refs.fieldEl.forEach(el => {
-  el.style.cssText =
-    'text-align: center; margin: 5px; display: flex; flex-direction: column; font-size: 15px; background-color:  #1BBC9B; border-radius: 5px; width: 70px';
-});
-refs.spanValueEl.forEach(el => {
-  el.style.fontSize = '30px';
-});
+
+// refs.startBtn.style.backgroundColor = '#1BBC9B';
+// refs.fieldEl.forEach(el => {
+//   el.style.cssText =
+//     'text-align: center; margin: 5px; display: flex; flex-direction: column; font-size: 15px; background-color:  #1BBC9B; border-radius: 5px; width: 70px';
+// });
+// refs.spanValueEl.forEach(el => {
+//   el.style.fontSize = '30px';
+// });
 refs.headEl.insertAdjacentHTML(
   'beforeend',
   '<style>#datetime-picker {min-width: 250px; border-color: #1BBC9B; margin: 5px}</style>'
@@ -46,12 +48,28 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
+    console.log(selectedDates);
+
     if (selectedDates[0] < Date.now()) {
       Notify.failure('Please choose a date in the future');
       refs.startBtn.disabled = true;
+      refs.resetBtn.disabled = true;
+      console.log(selectedDates);
       selectedDates[0] = new Date();
+    } else if (
+      selectedDates[0].getFullYear() === 2023 &&
+      selectedDates[0].getMonth() === 0 &&
+      selectedDates[0].getDate() === 1
+    ) {
+      refs.containerEl.classList.add('new-year');
+      refs.startBtn.disabled = false;
+      refs.resetBtn.disabled = false;
+
+      selectedTime = selectedDates[0];
     } else {
       refs.startBtn.disabled = false;
+      refs.resetBtn.disabled = false;
+
       selectedTime = selectedDates[0];
     }
   },
@@ -62,10 +80,15 @@ flatpickr('#datetime-picker', options);
 ////////START Btn///////////////////////////////////
 
 refs.startBtn.addEventListener('click', handleStartTime);
+refs.resetBtn.addEventListener('click', handleResetTime);
 
 function handleStartTime() {
   refs.startBtn.disabled = true;
   timer.updateTimer();
+}
+
+function handleResetTime() {
+  window.location.reload();
 }
 
 ////CLASS COUNTDOWN TIMER///////////////////////////////
@@ -74,6 +97,8 @@ class CountdownTimer {
     this.timerCount = null;
     this.isActive = false;
     refs.startBtn.disabled = true;
+    refs.resetBtn.disabled = true;
+
     this.daysEl = document.querySelector('[data-days]');
     this.hoursEl = document.querySelector('[data-hours]');
     this.minutesEl = document.querySelector('[data-minutes]');
@@ -132,3 +157,16 @@ function addLeadingZero(value) {
 const timer = new CountdownTimer();
 
 ///////////////////////////////////////////////////
+// refs.inputEl.addEventListener('input', bgImg);
+// console.log(refs.inputEl.value);
+// function bgImg(event) {
+//   const getFullYear = event.target.elements.value.getFullYear();
+//   const getMonth = event.target.elements.value.getMonth();
+//   const getDate = event.target.elements.value.getDate();
+
+//   if (getFullYear === 2023 && getMonth === 0 && getDate === 1) {
+//     refs.containerEl.classList.add('new-year');
+//   } else {
+//     return;
+//   }
+// }
