@@ -156,18 +156,3 @@ function addLeadingZero(value) {
 
 ///EXAMPLE//////////////////////////////////////
 const timer = new CountdownTimer();
-
-///////////////////////////////////////////////////
-// refs.inputEl.addEventListener('input', bgImg);
-// console.log(refs.inputEl.value);
-// function bgImg(event) {
-//   const getFullYear = event.target.elements.value.getFullYear();
-//   const getMonth = event.target.elements.value.getMonth();
-//   const getDate = event.target.elements.value.getDate();
-
-//   if (getFullYear === 2023 && getMonth === 0 && getDate === 1) {
-//     refs.containerEl.classList.add('new-year');
-//   } else {
-//     return;
-//   }
-// }
