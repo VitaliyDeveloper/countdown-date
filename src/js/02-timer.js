@@ -67,6 +67,7 @@ const options = {
 
       selectedTime = selectedDates[0];
     } else {
+      refs.containerEl.classList.remove('new-year');
       refs.startBtn.disabled = false;
       refs.resetBtn.disabled = false;
 
